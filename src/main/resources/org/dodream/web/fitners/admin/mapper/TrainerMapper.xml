@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dodream.web.fitners.admin.mapper.TrainerMapper">
+
+    <select id="getList" resultType="org.dodream.web.fitners.admin.domain.Trainer">
+        select * from tbl_trainer
+    </select>
+
+    <select id="select" resultType="org.dodream.web.fitners.admin.domain.Trainer">
+        select * from tbl_trainer where tid = #{tid}
+    </select>
+
+    <update id="remove">
+        update tbl_trainer set tid=#{tid}, modDate = now(),auth=0, disabled=0
+        where tid = #{tid}
+    </update>
+
+    <update id="update">
+        update tbl_trainer set tid = #{tid}, tname = #{tname}, temail = #{temail},auth= #{auth}, modDate = now()
+        where tid = #{tid}
+    </update>
+
+</mapper>
