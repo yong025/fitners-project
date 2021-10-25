@@ -3,10 +3,14 @@
   <component name="WebContextManager">
     <option name="state">
       <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/auction/read.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/auction" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/auction/read2.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/auction" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/auction/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/auction" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/fboard/list.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/fboard" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/fboard/read.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/fboard" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/fboard/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/fboard" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/read.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/read2.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
       </map>
     </option>
   </component>

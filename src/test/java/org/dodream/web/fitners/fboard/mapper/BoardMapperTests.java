@@ -63,7 +63,7 @@ public class BoardMapperTests {
     @Test
     public void removeTest(){
         log.warn("remove test..........................");
-        fboardMapper.remove(110L);
+        fboardMapper.delete(110L);
         log.warn("remove success!!!!!!!!!!!!!!!!!!!!!!!!!1");
     }
 }

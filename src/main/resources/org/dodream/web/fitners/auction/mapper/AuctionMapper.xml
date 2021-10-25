@@ -4,8 +4,119 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.dodream.web.fitners.auction.mapper.AuctionMapper">
 
-    <insert id="insertAuction">
-        insert into tbl_appliance
+    <resultMap id="auctionMap" type="org.dodream.web.fitners.auction.domain.Auction">
+        <id property="ano" column="ano"/>
+        <result property="location" column="location"/>
+        <result property="state" column="state"/>
+        <result property="mid" column="mid"/>
+        <result property="price" column="price"/>
+        <result property="regDate" column="regDate"/>
+        <result property="membership" column="membership"/>
+        <result property="useMembership" column="useMembership"/>
+        <result property="viewCount" column="viewCount"/>
+        <result property="likeCount" column="likeCount"/>
+        <result property="title" column="title"/>
+
+        <collection property="programList" resultMap="programMap"/>
+    </resultMap>
+
+    <resultMap id="programMap" type="org.dodream.web.fitners.auction.domain.Program">
+        <result property="ano" column="ano"/>
+        <result property="module" column="module"/>
+        <result property="detail" column="detail"/>
+    </resultMap>
+
+    <select id="selectAuction" resultMap="auctionMap">
+        select *
+        from
+            tbl_auction ta left join tbl_auction_category tac on ta.ano = tac.ano
+        where ta.ano = #{ano}
+    </select>
+
+    <select id="selectMemberPhysical" resultType="org.dodream.web.fitners.security.domain.MemberPhysical">
+        select * from tbl_member_physical where mid = #{mid}
+    </select>
+
+    <insert id="insertMemberPhysical">
+        insert into tbl_member_physical (mid, height, weight, age, sex, diseases)
+        values (#{mid}, #{height}, #{weight}, #{age}, #{sex}, #{diseases})
     </insert>
+
+    <!-- auction 작성 -->
+    <insert id="insertAuction">
+        insert into tbl_auction (location, mid, price, membership, title)
+        values (#{location}, #{mid}, #{price}, #{membership}, #{title})
+
+        <selectKey order="AFTER" resultType="long" keyProperty="ano">
+            select last_insert_id() <!-- 마지막으로 insert한 후 order에 맞게 insert한 숫자를 select함 -->
+        </selectKey>
+    </insert>
+
+    <!-- 해당 경매에 category 넣을 때 -->
+    <insert id="insertAuctionCategory">
+        insert into tbl_auction_category(ano, module, detail)
+        values (#{ano}, #{module}, #{detail})
+    </insert>
+
+    <!-- 원하는 프로그램이 없을 때 넣음 -->
+    <insert id="insertProgram">
+        insert into tbl_program (module, detail) values (#{module}, #{detail})
+    </insert>
+
+    <select id="selectProgram" resultType="org.dodream.web.fitners.auction.domain.Program">
+        select * from tbl_program
+    </select>
+
+    <select id="getProgramList" resultType="org.dodream.web.fitners.auction.domain.Program">
+        select * from tbl_auction_category where ano = #{ano}
+    </select>
+
+
+    <select id="getAuctionListCount" resultType="int">
+        select count(ano) from tbl_auction
+    </select>
+
+    <select id="getAuctionLists" resultType="org.dodream.web.fitners.auction.domain.AuctionList">
+        select ffinal.ano, location, membership, ffinal.mid, programs, sex, age, state, IFNULL(bidcount,0) as bidcount
+        from (
+
+                 select ano, location, membership, cccc.mid, programs, sex, age, state
+
+                 from(
+
+                         select auction.ano, location, membership, mid, programs, auction.state
+
+                         from tbl_auction as auction
+
+                                  left join (
+                             select ano, group_concat(program separator '|') as programs
+                             from (
+                                      select ano, concat(module, '-', detail) as program
+                                      from tbl_auction_category
+                                  ) as cc group by ano
+                         ) programsWithAno
+                                            on auction.ano = programsWithAno.ano) cccc
+
+
+                         left outer join  (
+                     select mid, sex, age
+                     from
+                         (
+                             select auc.mid, sex, age
+                             from tbl_auction as auc
+                                      left join tbl_member_physical as phy
+                                                on auc.mid = phy.mid)ab ) abc
+                                          on cccc.mid = abc.mid
+                 group by ano ) ffinal
+                 left join (
+            SELECT ano, COUNT(ano)as bidcount  FROM tbl_bidding
+            GROUP BY ano
+            HAVING COUNT(ano) > 1
+        ) plusbidcount on ffinal.ano = plusbidcount.ano
+
+        order by ano desc
+            limit #{skip},#{size}
+
+    </select>
 
 </mapper>

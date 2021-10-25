@@ -1,3 +1,4 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,15 +47,6 @@
         margin-top: 20px;
         margin-bottom: 20px;
     }
-    .iconA{
-        max-width: 30%;
-        height: auto;
-    }
-    .btn-customA{
-        color: #fff;
-        background: #fdc10c;
-        padding: 10px 20px;
-    }
 
 </style>
 <body class="goto-here">
@@ -98,11 +90,16 @@
                 <!--                <a class="dropdown-item" href="checkout.html">Checkout</a>-->
                 <!--              </div>-->
                 <!--            </li>-->
-                <li class="nav-item"><a href="/about.jsp" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="" class="nav-link">Matching</a></li>
+                <li class="nav-item"><a href="/main" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/auction/list" class="nav-link">Matching</a></li>
                 <li class="nav-item"><a href="" class="nav-link">Self Management</a></li>
                 <li class="nav-item"><a href="/fboard/list" class="nav-link">FreeBoard</a></li>
-                <li class="nav-item"><a href="" class="nav-link">Login</a></li>
+                <sec:authorize access="isAnonymous()">
+                    <li class="nav-item"><a href="/customLogin" class="nav-link">Login</a></li>
+                </sec:authorize>
+                <sec:authorize access="isAuthenticated()">
+                    <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+                </sec:authorize>
 
             </ul>
         </div>
